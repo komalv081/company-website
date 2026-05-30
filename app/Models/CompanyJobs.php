@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class CompanyJob extends Model
+class CompanyJobs extends Model
 {
 
-    protected $table='company_job';
+    protected $table='company_jobs';
 
     protected $fillable=[
     'title',

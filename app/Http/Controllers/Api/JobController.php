@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\CompanyJob;
+use App\Models\CompanyJobs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
@@ -12,13 +12,13 @@ class JobController extends Controller
     public function index()
     {
         return response()->json(
-            CompanyJob::latest()->get()
+            CompanyJobs::latest()->get()
         );
     }
 
     public function store(Request $request)
     {
-        $job = CompanyJob::create([
+        $job = CompanyJobs::create([
 
             'title'=>$request->title,
 
@@ -45,7 +45,7 @@ class JobController extends Controller
     }
     public function destroy($id)
     {
-        CompanyJob::findOrFail($id)->delete();
+        CompanyJobs::findOrFail($id)->delete();
 
         return response()->json([
             'message'=>'Deleted successfully'
@@ -53,7 +53,7 @@ class JobController extends Controller
     }
     public function update(Request $request, $id)
     {
-        $job = CompanyJob::findOrFail($id);
+        $job = CompanyJobs::findOrFail($id);
 
         $job->update([
             'title'=>$request->title,

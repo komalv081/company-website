@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\CompanyJob;
+use App\Models\CompanyJobs;
 use App\Models\News;
 use App\Models\Document;
 use App\Models\Policy;
@@ -12,7 +12,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $totalJobs = CompanyJob::count();
+        $totalJobs = CompanyJobs::count();
 
         $totalNews = News::count();
 

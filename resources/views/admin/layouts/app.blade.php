@@ -94,27 +94,35 @@
 
                 </div>
 
-                <div class="flex items-center gap-4">
+            <div class="flex items-center gap-4">
 
-                    <div class="text-right">
+                <div class="text-right">
 
-                        <p class="font-semibold text-gray-900">
-                            Komal Admin
-                        </p>
+                    <h3 class="font-bold">
+                        {{ auth()->user()->name ?? 'Admin' }}
+                    </h3>
 
-                        <p class="text-sm text-gray-500">
-                            Administrator
-                        </p>
-
-                    </div>
-
-                    <div class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
-
-                        K
-
-                    </div>
+                    <p class="text-sm text-gray-500">
+                        Administrator
+                    </p>
 
                 </div>
+
+                <form action="/admin/logout" method="POST">
+
+                    @csrf
+
+                    <button
+                        type="submit"
+                        class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg">
+
+                        Logout
+
+                    </button>
+
+                </form>
+
+            </div>
 
             </header>
 

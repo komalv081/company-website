@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CompanyJob;
+use App\Models\CompanyJobs;
 
 class JobPageController extends Controller
 {
     public function index()
     {
-        $jobs = CompanyJob::latest()->get();
+        $jobs = CompanyJobs::latest()->get();
 
         return view(
             'jobs.index',

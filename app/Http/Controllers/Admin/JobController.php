@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
-use App\Models\CompanyJob;
+use App\Models\CompanyJobs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 class JobController extends Controller
@@ -9,7 +9,7 @@ class JobController extends Controller
     // LIST JOBS
     public function index()
     {
-        $jobs = CompanyJob::latest()->get();
+        $jobs = CompanyJobs::latest()->get();
         return view('admin.jobs.index', compact('jobs'));
     }
     // CREATE PAGE
@@ -20,7 +20,7 @@ class JobController extends Controller
     // STORE JOB
     public function store(Request $request)
     {
-        CompanyJob::create([
+        CompanyJobs::create([
         'title'=>$request->title,
         'slug'=>Str::slug( $request->title ),
         'description'=>$request->description,
@@ -39,7 +39,7 @@ class JobController extends Controller
     // EDIT PAGE
     public function edit($id)
     {
-        $job = CompanyJob::findOrFail($id);
+        $job = CompanyJobs::findOrFail($id);
         return view(
         'admin.jobs.edit',
         compact('job')
@@ -48,7 +48,7 @@ class JobController extends Controller
     // UPDATE JOB
     public function update(  Request $request, $id)
     {
-        $job = CompanyJob::findOrFail($id);
+        $job = CompanyJobs::findOrFail($id);
         $job->update([
         'title'=>$request->title,
         'slug'=>Str::slug( $request->title),
@@ -65,7 +65,7 @@ class JobController extends Controller
     // DELETE JOB
     public function destroy($id)
     {
-        $job = CompanyJob::findOrFail($id);
+        $job = CompanyJobs::findOrFail($id);
         $job->delete();
         return redirect(   '/admin/jobs');
     }
