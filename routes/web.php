@@ -11,37 +11,23 @@ use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\DocumentController;
 use App\Http\Controllers\Admin\PolicyController;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\AIChatController;
 
-Route::get('/', function () {
-
-    return view('home');
-
-});
+Route::get('/', function () { return view('home');});
 
 Route::get('/jobs',[JobPageController::class,'index']);
 Route::get('/news',[NewsPageController::class,'index']);
 Route::get('/policies',[PolicyPageController::class,'index']);
 Route::get('/documents', [DocumentPageController::class,'index']);
 
-Route::get('/login', function () {
-    return redirect('/admin/login');
-})->name('login');
+Route::get('/login', function () {  return redirect('/admin/login');})->name('login');
 // LOGIN ROUTES
 
-Route::get(
-    '/admin/login',
-    [AuthController::class,'showLogin']
-)->name('admin.login');
+Route::get('/admin/login',  [AuthController::class,'showLogin'])->name('admin.login');
 
-Route::post(
-    '/admin/login',
-    [AuthController::class,'login']
-);
+Route::post( '/admin/login', [AuthController::class,'login']);
 
-Route::post(
-    '/admin/logout',
-    [AuthController::class,'logout']
-);
+Route::post( '/admin/logout',  [AuthController::class,'logout']);
 
 
 // PROTECTED ADMIN ROUTES
@@ -50,10 +36,7 @@ Route::middleware('auth')
     ->prefix('admin')
     ->group(function () {
 
-        Route::get(
-            '/',
-            [DashboardController::class,'index']
-        );
+        Route::get('/',[DashboardController::class,'index']);
 
         // Jobs
 
@@ -92,3 +75,8 @@ Route::middleware('auth')
         Route::delete('/policies/{id}',[PolicyController::class,'destroy']);
 
 });
+
+// AI Chat Routes
+Route::get('/ai-chat', [AIChatController::class, 'index']);
+
+Route::post('/ai-chat', [AIChatController::class, 'ask']);
