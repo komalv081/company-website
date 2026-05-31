@@ -9,71 +9,198 @@
         'resources/css/app.css',
         'resources/js/app.js'
     ])
-
-</head>
+    <meta  name="csrf-token"  content="{{ csrf_token() }}"></head>
 
 <body class="bg-gray-100 min-h-screen">
 
-<div class="max-w-4xl mx-auto py-12 px-6">
+<div class="max-w-5xl mx-auto py-6 px-4">
 
-    <div class="bg-white rounded-2xl shadow-lg p-8">
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
 
-        <h1 class="text-4xl font-black mb-2">
+        <div class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6">
 
-            AI Company Assistant
+            <h1 class="text-3xl font-bold">
+                🤖 AI Mimi
+            </h1>
 
-        </h1>
+            <p class="text-blue-100 mt-2">
+                Your Company AI Assistant
+            </p>
 
-        <p class="text-gray-500 mb-8">
+        </div>
 
-            Ask anything
-
-        </p>
-
-        <form action="/ai-chat" method="POST">
+        <form action="/clear-chat" method="POST">
 
             @csrf
 
-            <textarea
+            <button
+                class="bg-blue-500 text-white px-4 py-2 rounded-lg">
+
+                New Chat
+
+            </button>
+
+        </form>
+        <!-- Chat Area -->
+        <div id="chat-messages" class="max-h-[500px] overflow-y-auto p-6 space-y-4">
+
+        @if(count($messages) == 0)
+
+        <div class="py-16 text-center">
+
+            <div class="text-6xl mb-4">
+                🤖
+            </div>
+
+            <h2 class="text-2xl font-bold text-gray-800">
+                Welcome to AI Mimi
+            </h2>
+
+            <p class="text-gray-500 mt-2">
+                Ask me anything about your company.
+            </p>
+
+        </div>
+
+        @else
+
+            @foreach($messages as $message)
+
+                @if($message->role === 'user')
+
+                    <div class="flex justify-end">
+
+                        <div class="bg-blue-600 text-white px-4 py-3 rounded-2xl max-w-2xl">
+
+                            {{ $message->message }}
+
+                        </div>
+
+                    </div>
+
+                @else
+
+                <div class="flex justify-start">
+
+                    <div class="bg-gray-100 text-gray-800 px-4 py-3 rounded-2xl max-w-2xl">
+
+                        {!! nl2br(e($message->message)) !!}
+
+                    </div>
+
+                </div>
+
+                @endif
+
+            @endforeach
+
+        @endif
+
+        </div>
+
+        <!-- Input -->
+
+        <form action="/ai-chat" method="POST"
+              class="border-t p-4 flex gap-3">
+
+            @csrf
+
+            <input
+                id="message-input"
+                type="text"
                 name="question"
-                rows="4"
-                class="w-full border rounded-xl p-4"
-                placeholder="Ask a question...">{{ $question ?? '' }}</textarea>
+                placeholder="Type your message..."
+                class="flex-1 border rounded-xl px-4 py-3">
 
             <button
-                type="submit"
-                class="mt-4 bg-blue-600 text-white px-6 py-3 rounded-xl">
+                id="send-btn"
+                type="button"
+                class="bg-blue-600 hover:bg-blue-700 text-white px-6 rounded-xl">
 
-                Ask AI
+                Send
 
             </button>
 
         </form>
 
-        @isset($answer)
-
-            <div class="mt-8 bg-gray-50 p-6 rounded-xl">
-
-                <h2 class="font-bold text-lg mb-3">
-
-                    AI Response
-
-                </h2>
-
-                <p>
-
-                    {{ $answer }}
-
-                </p>
-
-            </div>
-
-        @endisset
-
     </div>
 
 </div>
+<script>
 
+document
+.getElementById('send-btn')
+.addEventListener('click', async function() {
+
+    let input = document.getElementById('message-input');
+
+    let question = input.value;
+    let chat = document.getElementById('chat-messages');
+
+    chat.innerHTML += `
+        <div class="flex justify-end mb-4">
+
+            <div class="bg-blue-600 text-white px-4 py-3 rounded-2xl max-w-2xl">
+
+                ${question}
+
+            </div>
+
+        </div>
+    `;
+    input.value = '';
+    if(question.trim() === '')
+    {
+        return;
+    }
+
+    document.getElementById('send-btn').innerText = 'Thinking...';
+
+    document.getElementById('send-btn').disabled = true;
+    let response = await fetch('/ai-chat/send', {
+
+        method: 'POST',
+
+        headers: {
+
+            'Content-Type': 'application/json',
+
+            'X-CSRF-TOKEN':
+                document.querySelector(
+                    'meta[name="csrf-token"]'
+                ).content
+
+        },
+
+        body: JSON.stringify({
+
+            question: question
+
+        })
+
+    });
+
+    let data = await response.json();
+
+    chat.innerHTML += `
+    <div class="flex justify-start mb-4">
+
+        <div class="bg-gray-100 text-gray-800 px-4 py-3 rounded-2xl max-w-2xl">
+
+            ${data.answer}
+
+        </div>
+
+    </div>
+    `;
+    chat.scrollTop = chat.scrollHeight;
+    document.getElementById('send-btn').innerText = 'Send';
+
+    document.getElementById('send-btn').disabled = false;
+
+});
+
+</script>
 </body>
 
 </html>

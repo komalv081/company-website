@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\DocumentController;
 use App\Http\Controllers\Admin\PolicyController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\AIChatController;
+use App\Models\ChatMessage;
 
 Route::get('/', function () { return view('home');});
 
@@ -80,3 +81,11 @@ Route::middleware('auth')
 Route::get('/ai-chat', [AIChatController::class, 'index']);
 
 Route::post('/ai-chat', [AIChatController::class, 'ask']);
+Route::post('/clear-chat', function () {
+
+    ChatMessage::truncate();
+
+    return redirect('/ai-chat');
+
+});
+Route::post('/ai-chat/send', [AIChatController::class, 'sendMessage']);
