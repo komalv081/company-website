@@ -86,7 +86,6 @@ Route::middleware('auth')
 // AI Chat Routes
 Route::get('/ai-chat', [AIChatController::class, 'index']);
 
-Route::post('/ai-chat', [AIChatController::class, 'ask']);
 Route::post('/clear-chat', function () {
 
     ChatMessage::truncate();
