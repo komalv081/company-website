@@ -175,9 +175,29 @@ class AIChatController extends Controller
 
         $documents = Document::all();
 
-        $knowledgeDocuments = KnowledgeBase::latest()
-        ->take(1)
-        ->get();
+        $keywords = explode(
+         ' ',
+            strtolower($request->question)
+        );
+
+        $knowledgeDocuments = KnowledgeBase::query();
+
+
+        //This part is crucial. We are trying to find relevant knowledge base documents based on keywords in the user's question. We only consider keywords longer than 3 characters to avoid common words.
+        // This is the Retrieval part of RAG.
+        foreach ($keywords as $keyword)
+        {
+            if(strlen($keyword) > 3)
+            {
+                $knowledgeDocuments->orWhere(
+                    'content',
+                    'LIKE',
+                    "%{$keyword}%"
+                );
+            }
+        }
+
+        $knowledgeDocuments = $knowledgeDocuments->get();
 
         // Build Company Context
 
@@ -229,12 +249,13 @@ class AIChatController extends Controller
         }
         $companyContext .= "\nKNOWLEDGE BASE:\n";
 
+        //This is the Augmentation part.
         foreach ($knowledgeDocuments as $knowledge)
         {
             $companyContext .=
             "- {$knowledge->title}
 
-            " . substr($knowledge->content, 0, 1000) . "
+            " . substr($knowledge->content, 0, 1500) . "
 
             ";
         }
@@ -272,6 +293,7 @@ class AIChatController extends Controller
             ];
         }
 
+        //This is the Generation part.
         $response = OpenAI::chat()->create([
 
             'model' => 'gpt-4.1-mini',
