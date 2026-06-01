@@ -50,7 +50,9 @@
                     class="hover:text-blue-400 transition">
                     Policies
                 </a>
-
+                <a href="/ai-chat">
+                    🤖 AI Assistant
+                </a>
             </div>
 
             <a href="/jobs"
