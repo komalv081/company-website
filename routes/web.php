@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\DocumentController;
 use App\Http\Controllers\Admin\PolicyController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\AIChatController;
+use App\Http\Controllers\Admin\KnowledgeBaseController;
 use App\Models\ChatMessage;
 
 Route::get('/', function () { return view('home');});
@@ -74,6 +75,11 @@ Route::middleware('auth')
         Route::get('/policies/{id}/edit',[PolicyController::class,'edit']);
         Route::put('/policies/{id}',[PolicyController::class,'update']);
         Route::delete('/policies/{id}',[PolicyController::class,'destroy']);
+
+        // Knowledge Base
+        Route::get('/knowledge-base',[KnowledgeBaseController::class,'index']);
+        Route::get('/knowledge-base/create',[KnowledgeBaseController::class,'create']);
+        Route::post('/knowledge-base',[KnowledgeBaseController::class,'store']);
 
 });
 

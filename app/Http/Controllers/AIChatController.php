@@ -8,7 +8,7 @@ use App\Models\Policy;
 use App\Models\ChatMessage;
 use Illuminate\Http\Request;
 use OpenAI\Laravel\Facades\OpenAI;
-
+use App\Models\KnowledgeBase;
 class AIChatController extends Controller
 {
     public function index()
@@ -157,6 +157,7 @@ class AIChatController extends Controller
 
     public function sendMessage(Request $request)
     {
+
         ChatMessage::create([
             'role' => 'user',
             'message' => $request->question
@@ -173,6 +174,10 @@ class AIChatController extends Controller
         $news = News::latest()->take(10)->get();
 
         $documents = Document::all();
+
+        $knowledgeDocuments = KnowledgeBase::latest()
+        ->take(1)
+        ->get();
 
         // Build Company Context
 
@@ -222,7 +227,17 @@ class AIChatController extends Controller
 
             ";
         }
+        $companyContext .= "\nKNOWLEDGE BASE:\n";
 
+        foreach ($knowledgeDocuments as $knowledge)
+        {
+            $companyContext .=
+            "- {$knowledge->title}
+
+            " . substr($knowledge->content, 0, 1000) . "
+
+            ";
+        }
         $chatMessages = [
 
             [
