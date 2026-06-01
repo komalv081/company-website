@@ -79,7 +79,7 @@
                 </label>
 
                 <input
-                    type="text"
+                    type="file"
                     name="file_url"
                     placeholder="https://example.com/policy.pdf"
                     class="w-full border border-gray-200 rounded-xl px-4 py-2.5">
