@@ -69,6 +69,12 @@
                     📘 Policies
 
                 </a>
+                <a href="/admin/knowledge-base"
+                   class="block px-5 py-3 rounded-xl hover:bg-blue-600 transition">
+
+                    🧠 Knowledge Base
+
+                </a>
 
             </nav>
 

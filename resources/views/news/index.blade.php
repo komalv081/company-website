@@ -45,7 +45,7 @@
 
                 @if($article->image)
 
-                    <img src="{{ asset('storage/'.$article->image) }}"
+                    <img src="{{ asset('storage/app/public/news'.$article->image) }}"
                          alt="{{ $article->title }}"
                          class="w-full h-32 object-cover">
 
@@ -109,7 +109,7 @@
 
                         </div>
 
-                        <a href="#"
+                        <a href="{{ asset('storage/' . $article->file) }}"
                            class="bg-black hover:bg-blue-600 transition text-white px-3 py-2 rounded-lg text-xs font-medium">
 
                             Read

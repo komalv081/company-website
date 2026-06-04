@@ -60,9 +60,13 @@
                        class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm">
 
             </div>
-
             <div>
-
+                <label class="block mb-2 text-sm font-semibold">
+                    Document (PDF)
+                </label>
+                <input type="file" name="document" accept=".pdf" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 text-sm">
+                </div>
+                <div>
                 <button type="submit"
                         class="bg-blue-600 hover:bg-blue-700 transition text-white px-6 py-2.5 rounded-xl text-sm font-semibold shadow-lg">
 

@@ -199,7 +199,20 @@ document
     document.getElementById('send-btn').disabled = false;
 
 });
+document
+.getElementById('message-input')
+.addEventListener('keypress', function(event) {
 
+    if (event.key === 'Enter')
+    {
+        event.preventDefault();
+
+        document
+            .getElementById('send-btn')
+            .click();
+    }
+
+});
 </script>
 </body>
 
