@@ -19,6 +19,8 @@ Route::get('/', function () { return view('home');});
 
 Route::get('/jobs',[JobPageController::class,'index']);
 Route::get('/news',[NewsPageController::class,'index']);
+Route::get('/news/{slug}', [NewsPageController::class, 'show'])
+    ->name('news.show');
 Route::get('/policies',[PolicyPageController::class,'index']);
 Route::get('/documents', [DocumentPageController::class,'index']);
 

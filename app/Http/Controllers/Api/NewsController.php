@@ -62,4 +62,14 @@ class NewsController extends Controller
             'message'=>'Deleted Successfully'
         ]);
     }
+    public function show($slug)
+    {
+        $news = News::where('slug', $slug)
+            ->firstOrFail();
+
+        return view(
+            'news.show',
+            compact('news')
+        );
+    }
 }

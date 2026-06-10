@@ -109,8 +109,8 @@
 
                         </div>
 
-                        <a href="{{ asset('storage/' . $article->file) }}"
-                           class="bg-black hover:bg-blue-600 transition text-white px-3 py-2 rounded-lg text-xs font-medium">
+                        <a href="{{ route('news.show', $article->slug) }}"
+                        class="bg-black hover:bg-blue-600 transition text-white px-3 py-2 rounded-lg text-xs font-medium">
 
                             Read
 

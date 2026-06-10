@@ -9,12 +9,17 @@ class KnowledgeBase extends Model
     protected $table = 'knowledge_base';
 
     protected $fillable = [
-
         'title',
-
         'content',
-
-        'file'
-
+        'file',
+        'version',
+        'is_active',
+        'processing_status',
+        'chunk_count',
+        'error_message',
     ];
+    public function chunks()
+    {
+        return $this->hasMany(KnowledgeBaseChunk::class);
+    }
 }

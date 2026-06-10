@@ -9,8 +9,17 @@ use App\Models\ChatMessage;
 use Illuminate\Http\Request;
 use OpenAI\Laravel\Facades\OpenAI;
 use App\Models\KnowledgeBase;
+use App\Services\KnowledgeBaseRetrievalService;
 class AIChatController extends Controller
 {
+    protected KnowledgeBaseRetrievalService $retrievalService;
+
+    public function __construct(
+        KnowledgeBaseRetrievalService $retrievalService
+    )
+    {
+        $this->retrievalService = $retrievalService;
+    }
     public function index()
     {
         $messages = ChatMessage::orderBy('id')->get();
@@ -41,29 +50,8 @@ class AIChatController extends Controller
 
         $documents = Document::all();
 
-        $keywords = explode(
-         ' ',
-            strtolower($request->question)
-        );
-
-        $knowledgeDocuments = KnowledgeBase::query();
-
-
-        //This part is crucial. We are trying to find relevant knowledge base documents based on keywords in the user's question. We only consider keywords longer than 3 characters to avoid common words.
-        // This is the Retrieval part of RAG.
-        foreach ($keywords as $keyword)
-        {
-            if(strlen($keyword) > 3)
-            {
-                $knowledgeDocuments->orWhere(
-                    'content',
-                    'LIKE',
-                    "%{$keyword}%"
-                );
-            }
-        }
-
-        $knowledgeDocuments = $knowledgeDocuments->get();
+        $knowledgeChunks = $this->retrievalService
+        ->retrieve($request->question);
 
         // Build Company Context
 
@@ -116,14 +104,13 @@ class AIChatController extends Controller
         $companyContext .= "\nKNOWLEDGE BASE:\n";
 
         //This is the Augmentation part.
-        foreach ($knowledgeDocuments as $knowledge)
+       foreach ($knowledgeChunks as $chunk)
         {
             $companyContext .=
-            "- {$knowledge->title}
+            "Chunk {$chunk->chunk_number}:\n\n";
 
-            " . substr($knowledge->content, 0, 1500) . "
-
-            ";
+            $companyContext .=
+            $chunk->content . "\n\n";
         }
         $chatMessages = [
 
