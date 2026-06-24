@@ -3,7 +3,11 @@ FROM webdevops/php-nginx:8.2
 WORKDIR /app
 
 COPY . /app
+RUN mkdir -p storage/logs
 
+RUN chown -R application:application /app/storage /app/bootstrap/cache
+
+RUN chmod -R 775 /app/storage /app/bootstrap/cache
 # Laravel public directory
 ENV WEB_DOCUMENT_ROOT=/app/public
 
