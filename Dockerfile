@@ -4,6 +4,9 @@ WORKDIR /app
 
 COPY . /app
 
+# Laravel public directory
+ENV WEB_DOCUMENT_ROOT=/app/public
+
 # Install Node.js
 RUN apt-get update && \
     apt-get install -y curl && \
