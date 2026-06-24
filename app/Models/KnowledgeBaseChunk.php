@@ -13,6 +13,7 @@ class KnowledgeBaseChunk extends Model
         'chunk_number',
         'page_number',
         'content',
+        'embedding',
     ];
 
     public function knowledgeBase()
